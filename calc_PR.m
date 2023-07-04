@@ -1,6 +1,6 @@
 % function for calculating polynomial controller coeffs using model
 % params
-function [c3, c2, c1, c0, r3, r2, r1, r0] = calc_PR(k_sp, c, r_a, t_a, j_1, j_2, c_12, k_d)
+function [c1, c0, r3, r2, r1, r0] = calc_PR(k_sp, c, r_a, t_a, j_1, j_2, c_12, k_d)
     % define desired characteristic polynom type and its coeffs
     n = 5; % polynom degree
     Tt = 1; % transition process time
@@ -27,17 +27,17 @@ function [c3, c2, c1, c0, r3, r2, r1, r0] = calc_PR(k_sp, c, r_a, t_a, j_1, j_2,
     X = linsolve(A, B);
 
     % get coeffs of polynomial controller from solved vector
-    c_1 = X(1,1);
-    c_0 = X(2,1);
+    c1 = X(1,1);
+    c0 = X(2,1);
     r3 = X(3,1);
     r2 = X(4,1);
     r1 = X(5,1);
     r0 = X(6,1);
     
-    % because degree of denominator must be more or equal the degree of
-    % numerator, multiply denominator on (0.001*s+1)^2
-    c3 = c_1*0.001^2;
-    c2 = 2*0.001*c_1 + c_0*0.001^2;
-    c1 = c_1 + c_0*2*0.001;
-    c0 = c_0*1;
+%     % because degree of denominator must be more or equal the degree of
+%     % numerator, multiply denominator on (0.001*s+1)^2
+%     c3 = c_1*0.001^2;
+%     c2 = 2*0.001*c_1 + c_0*0.001^2;
+%     c1 = c_1 + c_0*2*0.001;
+%     c0 = c_0*1;
 end
