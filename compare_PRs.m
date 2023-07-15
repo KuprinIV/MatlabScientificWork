@@ -31,14 +31,14 @@ pref_gain = 10*(C*c0/Ksp + r0);
 out = sim('two_mass_model.slx');
 
 figure(1);  grid on; hold on;
-plot(out.simout(:,1), out.simout(:,2));
+plot(simout(:,1), simout(:,2));
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','Î©,Ñ€Ğ°Ğ´/Ñ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','?,ğàä/ñ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
 % save reference step response of system with nominal PR and nominal parameters
-Pref = out.simout(:,2);
+Pref = simout(:,2);
 
 % define unstable cases counter
 unstable_cntr = 0;
@@ -55,13 +55,13 @@ for i = 1:NUM_TEST
 
     out = sim('two_mass_model.slx');
 
-    if max(out.simout(:,2)) > 500 || min(out.simout(:,2)) < 0
+    if max(simout(:,2)) > 500 || min(simout(:,2)) < 0
         disp(['model with test vector ', num2str(i), ' is unstable']);
         unstable_cntr = unstable_cntr + 1;
     else
-        figure(1); plot(out.simout(:,1), out.simout(:,2));
+        figure(1); plot(simout(:,1), simout(:,2));
         % calculate MSE between step responses on 5 seconds interval (before Mc)
-        mse1(i) = sqrt(immse(Pref, out.simout(:,2)));
+        mse1(i) = sqrt(immse(Pref, simout(:,2)));
     end
 end
 
@@ -80,7 +80,7 @@ disp(' ');
 
 figure(2);  grid on; hold on;
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','Î©,Ñ€Ğ°Ğ´/Ñ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','?,ğàä/ñ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -107,13 +107,13 @@ for i = 1:NUM_TEST
 
     out = sim('two_mass_model.slx');
 
-    if max(out.simout(:,2)) > 500 || min(out.simout(:,2)) < 0
+    if max(simout(:,2)) > 500 || min(simout(:,2)) < 0
         disp(['model with test vector ', num2str(i), ' is unstable']);
         unstable_cntr = unstable_cntr + 1;
     else
-        figure(2); plot(out.simout(:,1), out.simout(:,2));
+        figure(2); plot(simout(:,1), simout(:,2));
         % calculate MSE between step responses on 5 seconds interval (before Mc)
-        mse2(i) = sqrt(immse(Pref, out.simout(:,2)));
+        mse2(i) = sqrt(immse(Pref, simout(:,2)));
     end
 end
 
@@ -127,7 +127,7 @@ disp('------------------------');
 % plot MSE graphics
 figure(3); hold on; grid on;
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','MSE,Ñ€Ğ°Ğ´/Ñ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','MSE,ğàä/ñ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 plot(mse1, 'b -');
