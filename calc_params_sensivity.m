@@ -15,7 +15,7 @@ J1 = J1_nom;
 J2 = J2_nom;
 C12 = C12_nom;
 out = sim('two_mass_model.slx');
-Pnom = simout(:,2);
+Pnom = out.simout(:,2);
 
 J1_v = zeros(NUM, 1);
 J2_v = zeros(NUM, 1);
@@ -52,7 +52,7 @@ for i=1:NUM
     C12 = C12_nom;
 
     out = sim('two_mass_model.slx');
-    Ptest = simout(:,2);
+    Ptest = out.simout(:,2);
 
     j1_errors(i) = sqrt(immse(Ptest, Pnom));
     if i > 1
@@ -67,7 +67,7 @@ for i=1:NUM
     C12 = C12_nom;
     
     out = sim('two_mass_model.slx');
-    Ptest = simout(:,2);
+    Ptest = out.simout(:,2);
 
     j2_errors(i) = sqrt(immse(Ptest, Pnom));
     if i > 1
@@ -82,7 +82,7 @@ for i=1:NUM
     C12 = C12_v(i);
     
     out = sim('two_mass_model.slx');
-    Ptest = simout(:,2);
+    Ptest = out.simout(:,2);
 
     c12_errors(i) = sqrt(immse(Ptest, Pnom));
     if i > 1
@@ -98,7 +98,7 @@ for i=1:NUM
     Kd = Kd_v(i);
     
     out = sim('two_mass_model.slx');
-    Ptest = simout(:,2);
+    Ptest = out.simout(:,2);
 
     kd_errors(i) = sqrt(immse(Ptest, Pnom));
     if i > 1
@@ -107,17 +107,17 @@ for i=1:NUM
 end
 % draw errors graph
 figure(1); hold on; grid on;
-title('Step responses errors to parameters deviation');
+title("Step responses errors to parameters deviation");
 
 plot(deviation, [j1_errors j2_errors c12_errors kd_errors]);
-legend('J1','J2','C12','Kd');
+legend("J1","J2","C12","Kd");
 
 % draw sensivity graph
 figure(2); hold on; grid on;
-title('Step responses sensivity to parameters deviation');
+title("Step responses sensivity to parameters deviation");
 
 plot(deviation(2:100), [j1_sens j2_sens c12_sens kd_sens]);
-legend('J1','J2','C12','Kd');
+legend("J1","J2","C12","Kd");
 
 disp('Done');
 

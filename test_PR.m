@@ -44,6 +44,6 @@ pref_gain = 10*(C*c0/Ksp + r0);
 out = sim('two_mass_model.slx');
 
 figure(1)
-plot(simout(:,1), simout(:,2), 'b -');
+plot(out.simout(:,1), out.simout(:,2), 'b -');
 grid on;
 title(['Test vector is ', num2str(vector_num)]);

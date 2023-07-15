@@ -71,3 +71,4 @@ ts  = [tq*decf 0];
 function sys=mdlOutputs(t,x,u,decf,uy);
 sys(1) = u(1);
 sys(2) = u(2)./uy;
+

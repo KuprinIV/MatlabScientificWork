@@ -18,14 +18,14 @@ Uy = 10;
 delta = 0.5;
 
 % define number of training subset
-NUM_TRAIN = 500; 
+NUM_TRAIN = 1000; 
 % define number of test subset
 NUM_TEST = 0.2*NUM_TRAIN; 
 % sampling time
 %global Tq;
 Tq = 0.01;
 % decimation factor
-dec_factor = 15;
+dec_factor = 20;
 % number of step response characteristic points
 points_num = 3/(Tq*dec_factor)+1;
 
@@ -40,9 +40,9 @@ Ttest = zeros(4, NUM_TEST);
 pref_gain = 10*(C*c0/Ksp + r0);
 
 % save step responses for vectors from deviated two-mass system param values
-figure(1); grid on; hold all;
+figure(1); grid on; hold on;
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -59,10 +59,10 @@ for i=1:NUM_TRAIN
     Kd = Kd_nom*((1+delta)-2*delta*Ttr(4,i));
 
     out = sim('two_mass_model.slx');    
-    Ptrain(i,:) = decimated(:, 2);
+    Ptrain(i,:) = out.decimated(:, 2);
 
     % plot step response
-    plot(simout(:,1), simout(:,2));
+    plot(out.simout(:,1), out.simout(:,2));
     pause(0.01);    
 end
 
@@ -72,9 +72,9 @@ hold off;
 Ptest = zeros(NUM_TEST, points_num);
 
 % save step responses for vectors from deviated two-mass system param values
-figure(2);  grid on; hold all;
+figure(2);  grid on; hold on;
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -91,9 +91,9 @@ for i=1:NUM_TEST
     Kd = Kd_nom*((1+delta)-2*delta*Ttest(4,i));
 
     out = sim('two_mass_model.slx');
-    Ptest(i,:) = decimated(:, 2);
+    Ptest(i,:) = out.decimated(:,2);
     % plot step response
-    plot(simout(:,1), simout(:,2));
+    plot(out.simout(:,1), out.simout(:,2));
     pause(0.01);    
 end
 

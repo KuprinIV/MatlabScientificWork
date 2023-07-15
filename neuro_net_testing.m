@@ -31,7 +31,7 @@ c12_err = zeros(NUM_TEST, 1);
 % perform testing RBFNN identification on test data subset
 figure(5);
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -68,24 +68,24 @@ for i=1:NUM_TEST
     %kd_err(i) = (Kd-Kd_test)/Kd_test*100;
 
     out = sim('two_mass_model.slx');
-    Pid = decimated(:,2);
+    Pid = out.decimated(:,2);
     % plot step response
-    plot(simout(:,1), simout(:,2));
-    Pt = Ptest(1:length(Pid), i);
+    plot(out.simout(:,1), out.simout(:,2));
+
     % calculate MSE between test and identified step responses
-    mse(i) = sqrt(immse(Pt, Pid));
+    mse(i) = sqrt(immse(Ptest(:,i), Pid));
     disp(['MSE = ', num2str(mse(i))]);
     disp('-----------------------------------');
 
-    plot(decimated(:,1), Pt, 'b -', decimated(:,1), Pid, 'r -'); grid on;
+    plot(out.decimated(:,1), Ptest(:,i), 'b -', out.decimated(:,1), Pid, 'r -'); grid on;
     title(['Test num = ', num2str(i), '; MSE = ', num2str(mse(i))]);
-    pause(0.05);     
+    pause(0.25);     
 end
 
 % plot MSE
 figure(6);
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','MSE,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','MSE,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 plot(mse, 'b -'); grid on;
@@ -98,9 +98,9 @@ annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 hold on;
 grid on;
-plot(j1_err, 'b');
-plot(j2_err, 'r');
-plot(c12_err, 'g');
+plot(j1_err);
+plot(j2_err);
+plot(c12_err);
 %plot(kd_err);
 legend('J1 errors', 'J2 errors', 'C12 errors')
 hold off;

@@ -38,11 +38,11 @@ out = sim('two_mass_model.slx');
 figure(1); grid on; hold on;
 title(['Test vector is ', num2str(vector_num)]);
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','?,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
-plot(simout(:,1), simout(:,2), 'b');
+plot(out.simout(:,1), out.simout(:,2));
 
 % show real model params
 disp('Real model param values:');
@@ -62,4 +62,4 @@ disp(Y);
 pref_gain = 10*(C*c0/Ksp + r0);
 
 out = sim('two_mass_model.slx');
-plot(simout(:,1), simout(:,2), 'r');
+plot(out.simout(:,1), out.simout(:,2));
