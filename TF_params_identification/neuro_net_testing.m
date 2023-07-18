@@ -50,11 +50,12 @@ for i=1:NUM_TEST
     disp('Identified model param values:');
     Y=sim(rbfnn, Ptest(:,i));
     disp(Y);
-
-    a3 = a_nom(2)*((1+delta)-2*delta*Y(1));
-    a2 = a_nom(3)*((1+delta)-2*delta*Y(2));
-    a1 = a_nom(4)*((1+delta)-2*delta*Y(3));
-    a0 = a_nom(5)*((1+delta)-2*delta*Y(4));
+    
+    acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
+    a3 = acoefs(2);
+    a2 = acoefs(3);
+    a1 = acoefs(4);
+    a0 = acoefs(5);
 
     a3_test = a_nom(2)*((1+delta)-2*delta*Ttest(1,i));
     a2_test = a_nom(3)*((1+delta)-2*delta*Ttest(2,i));

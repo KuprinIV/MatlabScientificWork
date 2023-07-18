@@ -59,10 +59,15 @@ for i=1:NUM_TRAIN
     Ttr(3,i) =  1.0*rand+0.05; %a1
     Ttr(4,i) =  1.0*rand+0.05; %a0
     
-    a3 = a_nom(2)*((1+delta)-2*delta*Ttr(1,i));
-    a2 = a_nom(3)*((1+delta)-2*delta*Ttr(2,i));
-    a1 = a_nom(4)*((1+delta)-2*delta*Ttr(3,i));
-    a0 = a_nom(5)*((1+delta)-2*delta*Ttr(4,i));
+    acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Ttr, i, delta);
+    a3 = acoefs(2);
+    a2 = acoefs(3);
+    a1 = acoefs(4);
+    a0 = acoefs(5);
+%     a3 = a_nom(2)*((1+delta)-2*delta*Ttr(1,i));
+%     a2 = a_nom(3)*((1+delta)-2*delta*Ttr(2,i));
+%     a1 = a_nom(4)*((1+delta)-2*delta*Ttr(3,i));
+%     a0 = a_nom(5)*((1+delta)-2*delta*Ttr(4,i));
 
     out = sim('two_mass_model_tf.slx');    
     Ptrain(i,:) = decimated(:, 2);
@@ -91,10 +96,15 @@ for i=1:NUM_TEST
     Ttest(3,i) =  1.0*rand+0.05; %a1
     Ttest(4,i) =  1.0*rand+0.05; %a0
 
-    a3 = a_nom(2)*((1+delta)-2*delta*Ttest(1,i));
-    a2 = a_nom(3)*((1+delta)-2*delta*Ttest(2,i));
-    a1 = a_nom(4)*((1+delta)-2*delta*Ttest(3,i));
-    a0 = a_nom(5)*((1+delta)-2*delta*Ttest(4,i));
+    acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
+    a3 = acoefs(2);
+    a2 = acoefs(3);
+    a1 = acoefs(4);
+    a0 = acoefs(5);
+%     a3 = a_nom(2)*((1+delta)-2*delta*Ttest(1,i));
+%     a2 = a_nom(3)*((1+delta)-2*delta*Ttest(2,i));
+%     a1 = a_nom(4)*((1+delta)-2*delta*Ttest(3,i));
+%     a0 = a_nom(5)*((1+delta)-2*delta*Ttest(4,i));
 
     out = sim('two_mass_model_tf.slx');
     Ptest(i,:) = decimated(:, 2);
