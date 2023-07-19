@@ -14,10 +14,10 @@ disp(' ');
 Pstep = Ptest(:, vector_num);
 
 % define Simulink model params
-b1 = b_nom(1);
-b0 = b_nom(2);
-
-acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Ttest, vector_num, delta);
+[bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, vector_num, delta);
+b1 = bcoefs(1);
+b0 = bcoefs(2);
+    
 a3 = acoefs(2);
 a2 = acoefs(3);
 a1 = acoefs(4);
@@ -35,7 +35,7 @@ disp([a3; a2; a1; a0;]);
 disp('Identified model param values:');
 Y=sim(rbfnn, Pstep);
 % restore true param values from normalized form
-acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
+[bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
 Y(1) = acoefs(2);
 Y(2) = acoefs(3);
 Y(3) = acoefs(4);
@@ -47,8 +47,8 @@ Y(4) = acoefs(5);
 disp(Y);
 
 % calculate polynomial controller coeffs and params in Simulink model
-[c1, c0, r3, r2, r1, r0] = calc_PR(b1, b0, Y(1), Y(2), Y(3), Y(4));
-pref_gain = 10*(Y(4)*c0/b0 + r0);
+[c1, c0, r3, r2, r1, r0] = calc_PR(bcoefs(1), bcoefs(2), Y(1), Y(2), Y(3), Y(4));
+pref_gain = 10*(Y(4)*c0/bcoefs(2) + r0);
 
 % perform simulation with system Simulink model
 out = sim('two_mass_model_tf.slx');

@@ -39,7 +39,7 @@ Ttest = zeros(4, NUM_TEST);
 % calc PR with nominal model parameter values
 [c1, c0, r3, r2, r1, r0] = calc_PR(b_nom(1), b_nom(2), a_nom(2), a_nom(3), a_nom(4), a_nom(5));
 % correct control system's gain
-pref_gain = 10*(C*c0/Ksp + r0);
+pref_gain = 10*(a_nom(5)*c0/b_nom(2) + r0);
 
 % save step responses for vectors from deviated two-mass system param values
 figure(1); grid on; hold all;
@@ -48,10 +48,6 @@ annotation('textbox',[.01 .9 .1 .1],'String','W,рад/с','FontWeight','Bold','FitB
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
-% define numerator transfer polynomial coefficients
-b1 = b_nom(1);
-b0 = b_nom(2);
-
 for i=1:NUM_TRAIN
     % calc transfer function polynomial coeffs for current vectors state
     Ttr(1,i) =  1.0*rand+0.05; %a3
@@ -59,7 +55,10 @@ for i=1:NUM_TRAIN
     Ttr(3,i) =  1.0*rand+0.05; %a1
     Ttr(4,i) =  1.0*rand+0.05; %a0
     
-    acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Ttr, i, delta);
+    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttr, i, delta);
+    b1 = bcoefs(1);
+    b0 = bcoefs(2);
+    
     a3 = acoefs(2);
     a2 = acoefs(3);
     a1 = acoefs(4);
@@ -96,7 +95,10 @@ for i=1:NUM_TEST
     Ttest(3,i) =  1.0*rand+0.05; %a1
     Ttest(4,i) =  1.0*rand+0.05; %a0
 
-    acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
+    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
+    b1 = bcoefs(1);
+    b0 = bcoefs(2);
+    
     a3 = acoefs(2);
     a2 = acoefs(3);
     a1 = acoefs(4);

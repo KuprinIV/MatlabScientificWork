@@ -51,16 +51,20 @@ for i=1:NUM_TEST
     Y=sim(rbfnn, Ptest(:,i));
     disp(Y);
     
-    acoefs = calcPolyACoeffs(C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
+    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
+    b1 = bcoefs(1);
+    b0 = bcoefs(2);
+    
     a3 = acoefs(2);
     a2 = acoefs(3);
     a1 = acoefs(4);
     a0 = acoefs(5);
 
-    a3_test = a_nom(2)*((1+delta)-2*delta*Ttest(1,i));
-    a2_test = a_nom(3)*((1+delta)-2*delta*Ttest(2,i));
-    a1_test = a_nom(4)*((1+delta)-2*delta*Ttest(3,i)); 
-    a0_test = a_nom(5)*((1+delta)-2*delta*Ttest(4,i)); 
+    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
+    a3_test = acoefs(2);
+    a2_test = acoefs(3);
+    a1_test = acoefs(4); 
+    a0_test = acoefs(5); 
 
     % calculate parameters estimation relative errors in %
     a3_err(i) = (a3-a3_test)/a3_test*100;
