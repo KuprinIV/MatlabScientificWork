@@ -6,14 +6,10 @@ load('rbfnn_res.mat');
 load ('rbfnn_ts.mat');
 
 y = sim(rbfnn, Ptest);
-figure(1);
-postreg(y(1,:), Ttest(1,:));
-figure(2);
-postreg(y(2,:), Ttest(2,:));
-figure(3);
-postreg(y(3,:), Ttest(3,:));
-figure(4);
-postreg(y(4,:), Ttest(4,:));
+for i = 1:size(Ttest,1)
+    figure(i);
+    postreg(y(i,:), Ttest(i,:));
+end
 
 % define MSE vector
 mse = zeros(NUM_TEST, 1);
@@ -29,7 +25,7 @@ c12_err = zeros(NUM_TEST, 1);
 % min_noise + (max_noise - min_noise)*rand(size(P,1),1); P_n = P+noise;
 
 % perform testing RBFNN identification on test data subset
-figure(5);
+figure(size(Ttest,1)+1);
 annotation('arrow',[.131,.131],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','W,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
@@ -83,7 +79,7 @@ for i=1:NUM_TEST
 end
 
 % plot MSE
-figure(6);
+figure(size(Ttest,1)+2);
 annotation('arrow',[.131,.131],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','MSE,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
@@ -91,7 +87,7 @@ annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxT
 plot(mse, 'b -'); grid on;
 
 % plot relative parameters estimation errors
-figure(7); 
+figure(size(Ttest,1)+3); 
 annotation('arrow',[.131,.131],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','Errors, %','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);

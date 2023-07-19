@@ -9,7 +9,7 @@ disp('Busy!');
 load('rbfnn_ts.mat');
 
 % define RBFNN learing algorithm params
-goal = 0.0025;
+goal = 1000;
 spread = 1;
 max_num_neurons = 500;
 num_neurons_per_display = 5;
@@ -18,14 +18,10 @@ num_neurons_per_display = 5;
 rbfnn = newrb(Ptrain, Ttrain, goal, spread, max_num_neurons, num_neurons_per_display);
 
 y = sim(rbfnn, Ptrain);
-figure(1);
-postreg(y(1,:), Ttrain(1,:));
-figure(2);
-postreg(y(2,:), Ttrain(2,:));
-figure(3);
-postreg(y(3,:), Ttrain(3,:));
-figure(4);
-postreg(y(4,:), Ttrain(4,:));
+for i = 1:size(Ttrain, 1)
+    figure(i);
+    postreg(y(i,:), Ttrain(i,:));
+end
 
 % save created RBFNN
 save rbfnn_res rbfnn;

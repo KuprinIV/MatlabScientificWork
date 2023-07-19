@@ -30,8 +30,8 @@ points_num = 3/(Tq*dec_factor)+1;
 
 % define RBFNN input vector with step responses
 Ptrain = zeros(NUM_TRAIN, points_num);
-Ttr = zeros(4, NUM_TRAIN);
-Ttest = zeros(4, NUM_TEST);
+Ttr = zeros(6, NUM_TRAIN);
+Ttest = zeros(6, NUM_TEST);
 
 % calc nominal transfer function coefficients
 [b_nom, a_nom] = calcPolyCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd);
@@ -54,6 +54,8 @@ for i=1:NUM_TRAIN
     Ttr(2,i) =  1.0*rand+0.05; %a2
     Ttr(3,i) =  1.0*rand+0.05; %a1
     Ttr(4,i) =  1.0*rand+0.05; %a0
+    Ttr(5,i) =  1.0*rand+0.05; %b1
+    Ttr(6,i) =  1.0*rand+0.05; %b0
     
     [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttr, i, delta);
     b1 = bcoefs(1);
@@ -63,6 +65,13 @@ for i=1:NUM_TRAIN
     a2 = acoefs(3);
     a1 = acoefs(4);
     a0 = acoefs(5);
+    
+    Ttr(1,i) = a3;
+    Ttr(2,i) = a2;
+    Ttr(3,i) = a1;
+    Ttr(4,i) = a0;
+    Ttr(5,i) = b1;
+    Ttr(6,i) = b0;
 %     a3 = a_nom(2)*((1+delta)-2*delta*Ttr(1,i));
 %     a2 = a_nom(3)*((1+delta)-2*delta*Ttr(2,i));
 %     a1 = a_nom(4)*((1+delta)-2*delta*Ttr(3,i));
@@ -94,6 +103,8 @@ for i=1:NUM_TEST
     Ttest(2,i) =  1.0*rand+0.05; %a2
     Ttest(3,i) =  1.0*rand+0.05; %a1
     Ttest(4,i) =  1.0*rand+0.05; %a0
+    Ttest(5,i) =  1.0*rand+0.05; %b1
+    Ttest(6,i) =  1.0*rand+0.05; %b0
 
     [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
     b1 = bcoefs(1);
@@ -103,6 +114,13 @@ for i=1:NUM_TEST
     a2 = acoefs(3);
     a1 = acoefs(4);
     a0 = acoefs(5);
+    
+    Ttest(1,i) = a3;
+    Ttest(2,i) = a2;
+    Ttest(3,i) = a1;
+    Ttest(4,i) = a0;
+    Ttest(5,i) = b1;
+    Ttest(6,i) = b0;
 %     a3 = a_nom(2)*((1+delta)-2*delta*Ttest(1,i));
 %     a2 = a_nom(3)*((1+delta)-2*delta*Ttest(2,i));
 %     a1 = a_nom(4)*((1+delta)-2*delta*Ttest(3,i));

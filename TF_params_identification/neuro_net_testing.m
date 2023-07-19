@@ -6,14 +6,10 @@ load('rbfnn_res.mat');
 load ('rbfnn_ts.mat');
 
 y = sim(rbfnn, Ptest);
-figure(1);
-postreg(y(1,:), Ttest(1,:));
-figure(2);
-postreg(y(2,:), Ttest(2,:));
-figure(3);
-postreg(y(3,:), Ttest(3,:));
-figure(4);
-postreg(y(4,:), Ttest(4,:));
+for i = 1:size(Ttest, 1)
+    figure(i);
+    postreg(y(i,:), Ttest(i,:));
+end
 
 % define MSE vector
 mse = zeros(NUM_TEST, 1);
@@ -24,12 +20,15 @@ a2_err = zeros(NUM_TEST, 1);
 a1_err = zeros(NUM_TEST, 1);
 a0_err = zeros(NUM_TEST, 1);
 
+b1_err = zeros(NUM_TEST, 1);
+b0_err = zeros(NUM_TEST, 1);
+
 % Наложение шума на идентифицируемый переходный процесс k = 0.00; %0.005; %
 % noise min_noise = -P(size(P,1))*k; max_noise =  P(size(P,1))*k; noise =
 % min_noise + (max_noise - min_noise)*rand(size(P,1),1); P_n = P+noise;
 
 % perform testing RBFNN identification on test data subset
-figure(5);
+figure(size(Ttest, 1)+1);
 annotation('arrow',[.131,.131],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','W,���/�','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
@@ -51,26 +50,43 @@ for i=1:NUM_TEST
     Y=sim(rbfnn, Ptest(:,i));
     disp(Y);
     
-    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
-    b1 = bcoefs(1);
-    b0 = bcoefs(2);
-    
-    a3 = acoefs(2);
-    a2 = acoefs(3);
-    a1 = acoefs(4);
-    a0 = acoefs(5);
+%     [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
+%     b1 = bcoefs(1);
+%     b0 = bcoefs(2);
+%     
+%     a3 = acoefs(2);
+%     a2 = acoefs(3);
+%     a1 = acoefs(4);
+%     a0 = acoefs(5);
 
-    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
-    a3_test = acoefs(2);
-    a2_test = acoefs(3);
-    a1_test = acoefs(4); 
-    a0_test = acoefs(5); 
+    a3 = Y(1);
+    a2 = Y(2);
+    a1 = Y(3);
+    a0 = Y(4);
+    b1 = b_nom(1);
+    b0 = Y(6);
+
+%     [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, i, delta);
+%     a3_test = acoefs(2);
+%     a2_test = acoefs(3);
+%     a1_test = acoefs(4); 
+%     a0_test = acoefs(5); 
+
+    a3_test = Ttest(1,i);
+    a2_test = Ttest(2,i);
+    a1_test = Ttest(3,i);
+    a0_test = Ttest(4,i);
+%     b1_test = Ttest(5,i);
+    b0_test = Ttest(6,i);
 
     % calculate parameters estimation relative errors in %
     a3_err(i) = (a3-a3_test)/a3_test*100;
     a2_err(i) = (a2-a2_test)/a2_test*100;
     a1_err(i) = (a1-a1_test)/a1_test*100;
     a0_err(i) = (a0-a0_test)/a0_test*100;
+    
+%     b1_err(i) = (b1-b1_test)/b1_test*100;
+    b0_err(i) = (b0-b0_test)/b0_test*100;
 
     out = sim('two_mass_model_tf.slx');
     Pid = decimated(:,2);
@@ -88,7 +104,7 @@ for i=1:NUM_TEST
 end
 
 % plot MSE
-figure(6);
+figure(size(Ttest, 1)+2);
 annotation('arrow',[.131,.131],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','MSE,���/�','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
@@ -96,7 +112,7 @@ annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxT
 plot(mse, 'b -'); grid on;
 
 % plot relative parameters estimation errors
-figure(7); 
+figure(size(Ttest, 1)+3); 
 annotation('arrow',[.131,.131],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','Errors, %','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
@@ -107,5 +123,7 @@ plot(a3_err);
 plot(a2_err);
 plot(a1_err);
 plot(a0_err);
-legend('a3 errors', 'a2 errors', 'a1 errors', 'a0 errors')
+% plot(b1_err);
+plot(b0_err);
+legend('a3 errors', 'a2 errors', 'a1 errors', 'a0 errors', 'b0 errors')
 hold off;
