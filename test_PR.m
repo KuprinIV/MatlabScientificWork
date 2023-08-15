@@ -18,10 +18,10 @@ Ksp = 7; % constant
 C = 0.16; % constant
 Ra = 3.15; % constant
 Ta = 0.05; % constant
-J1 = J1_nom*((1+delta)-2*delta*Ttest(1,vector_num));
-J2 = J2_nom*((1+delta)-2*delta*Ttest(2,vector_num));
-C12 = C12_nom*((1+delta)-2*delta*Ttest(3,vector_num));
-Kd = Kd_nom*((1+delta)-2*delta*Ttest(4,vector_num));
+J1 = J1_nom*Ttest(1,vector_num);
+J2 = J2_nom*Ttest(2,vector_num);
+C12 = C12_nom*Ttest(3,vector_num);
+Kd = Kd_nom*Ttest(4,vector_num);
 
 % show real model params
 disp('Real model param values:');
@@ -31,9 +31,9 @@ disp([J1; J2; C12;]);
 disp('Identified model param values:');
 Y=sim(rbfnn, Pstep);
 % restore true param values from normalized form
-Y(1) = J1_nom*((1+delta)-2*delta*Y(1));
-Y(2) = J2_nom*((1+delta)-2*delta*Y(2));
-Y(3) = C12_nom*((1+delta)-2*delta*Y(3));
+Y(1) = J1_nom*Y(1);
+Y(2) = J2_nom*Y(2);
+Y(3) = C12_nom*Y(3);
 disp(Y);
 
 % calculate polynomial controller coeffs and params in Simulink model

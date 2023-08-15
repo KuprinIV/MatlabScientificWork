@@ -14,6 +14,9 @@ Kd_nom = Kd;
 % reference input
 Uy = 10;
 
+% set output noise to zero
+noise_level = 0;
+
 % define params deviation
 delta = 0.5;
 
@@ -48,15 +51,15 @@ annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxT
 
 for i=1:NUM_TRAIN
     % calc transfer function polynomial coeffs for current vectors state
-    Ttr(1,i) =  1.0*rand+0.05; %J1
-    Ttr(2,i) =  1.0*rand+0.05; %J2
-    Ttr(3,i) =  1.0*rand+0.05; %C12
-    Ttr(4,i) =  1.0*rand+0.05; %Kd
+    Ttr(1,i) =  (1+delta)-2*delta*rand; %J1
+    Ttr(2,i) =  (1+delta)-2*delta*rand; %J2
+    Ttr(3,i) =  (1+delta)-2*delta*rand; %C12
+    Ttr(4,i) =  (1+delta)-2*delta*rand; %Kd
 
-    J1 = J1_nom*((1+delta)-2*delta*Ttr(1,i));
-    J2 = J2_nom*((1+delta)-2*delta*Ttr(2,i));
-    C12 = C12_nom*((1+delta)-2*delta*Ttr(3,i));
-    Kd = Kd_nom*((1+delta)-2*delta*Ttr(4,i));
+    J1 = J1_nom*Ttr(1,i);
+    J2 = J2_nom*Ttr(2,i);
+    C12 = C12_nom*Ttr(3,i);
+    Kd = Kd_nom*Ttr(4,i);
 
     out = sim('two_mass_model.slx');    
     Ptrain(i,:) = decimated(:, 2);
@@ -80,15 +83,15 @@ annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxT
 
 for i=1:NUM_TEST
     % calc transfer function polynomial coeffs for current vectors state
-    Ttest(1,i) =  1.0*rand+0.05; %J1
-    Ttest(2,i) =  1.0*rand+0.05; %J2
-    Ttest(3,i) =  1.0*rand+0.05; %C12
-    Ttest(4,i) =  1.0*rand+0.05; %Kd
+    Ttest(1,i) =  (1+delta)-2*delta*rand; %J1
+    Ttest(2,i) =  (1+delta)-2*delta*rand; %J2
+    Ttest(3,i) =  (1+delta)-2*delta*rand; %C12
+    Ttest(4,i) =  (1+delta)-2*delta*rand; %Kd
 
-    J1 = J1_nom*((1+delta)-2*delta*Ttest(1,i));
-    J2 = J2_nom*((1+delta)-2*delta*Ttest(2,i));
-    C12 = C12_nom*((1+delta)-2*delta*Ttest(3,i));
-    Kd = Kd_nom*((1+delta)-2*delta*Ttest(4,i));
+    J1 = J1_nom*Ttest(1,i);
+    J2 = J2_nom*Ttest(2,i);
+    C12 = C12_nom*Ttest(3,i);
+    Kd = Kd_nom*Ttest(4,i);
 
     out = sim('two_mass_model.slx');
     Ptest(i,:) = decimated(:, 2);

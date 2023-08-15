@@ -10,7 +10,7 @@ load('rbfnn_ts.mat');
 
 % define RBFNN learing algorithm params
 goal = 0.0005;
-spread = 1;
+spread = 10;
 max_num_neurons = 500;
 num_neurons_per_display = 5;
 

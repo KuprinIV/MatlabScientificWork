@@ -15,6 +15,9 @@ J2 = 0.05;
 C12 = 0.65;
 Kd = 0.01;
 
+% set output noise level
+noise_level = 10;
+
 % define MSE vectors
 mse1 = zeros(NUM_TEST, 1);
 mse2 = zeros(NUM_TEST, 1);
@@ -48,10 +51,10 @@ disp('Busy');
 disp(' ');
 for i = 1:NUM_TEST
     % restore true param values from normalized form
-    J1 = J1_nom*((1+delta)-2*delta*Ttest(1,i));
-    J2 = J2_nom*((1+delta)-2*delta*Ttest(2,i));
-    C12 = C12_nom*((1+delta)-2*delta*Ttest(3,i));
-    Kd = Kd_nom*((1+delta)-2*delta*Ttest(4,i));
+    J1 = J1_nom*Ttest(1,i);
+    J2 = J2_nom*Ttest(2,i);
+    C12 = C12_nom*Ttest(3,i);
+    Kd = Kd_nom*Ttest(4,i);
 
     out = sim('two_mass_model.slx');
 
@@ -86,10 +89,10 @@ annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxT
 
 for i = 1:NUM_TEST
     % restore true param values from normalized form
-    J1 = J1_nom*((1+delta)-2*delta*Ttest(1,i));
-    J2 = J2_nom*((1+delta)-2*delta*Ttest(2,i));
-    C12 = C12_nom*((1+delta)-2*delta*Ttest(3,i));
-    Kd = Kd_nom*((1+delta)-2*delta*Ttest(4,i));
+    J1 = J1_nom*Ttest(1,i);
+    J2 = J2_nom*Ttest(2,i);
+    C12 = C12_nom*Ttest(3,i);
+    Kd = Kd_nom*Ttest(4,i);
 
     % get step response for selected test vector
     Pstep = Ptest(:, i);
@@ -97,9 +100,9 @@ for i = 1:NUM_TEST
     % identify model params using RBFNN
     Y=sim(rbfnn, Pstep);
 
-    Y(1) = J1_nom*((1+delta)-2*delta*Y(1));
-    Y(2) = J2_nom*((1+delta)-2*delta*Y(2));
-    Y(3) = C12_nom*((1+delta)-2*delta*Y(3));
+    Y(1) = J1_nom*Y(1);
+    Y(2) = J2_nom*Y(2);
+    Y(3) = C12_nom*Y(3);
 
     % calculate polynomial controller coeffs and params in Simulink model
     [c1, c0, r3, r2, r1, r0] = calc_PR(Ksp, C, Ra, Ta, Y(1), Y(2), Y(3), Kd_nom);

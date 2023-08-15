@@ -5,6 +5,9 @@ load('rbfnn_res.mat');
 % load data with training and test subsets
 load ('rbfnn_ts.mat');
 
+% set output noise level
+noise_level = 1000;
+
 y = sim(rbfnn, Ptest);
 for i = 1:size(Ttest,1)
     figure(i);
@@ -47,14 +50,14 @@ for i=1:NUM_TEST
     Y=sim(rbfnn, Ptest(:,i));
     disp(Y);
 
-    J1 = J1_nom*((1+delta)-2*delta*Y(1));
-    J2 = J2_nom*((1+delta)-2*delta*Y(2));
-    C12 = C12_nom*((1+delta)-2*delta*Y(3));
+    J1 = J1_nom*Y(1);
+    J2 = J2_nom*Y(2);
+    C12 = C12_nom*Y(3);
     Kd = Kd_nom;%*((1+delta)-2*delta*Y(4));
 
-    J1_test = J1_nom*((1+delta)-2*delta*Ttest(1,i));
-    J2_test = J2_nom*((1+delta)-2*delta*Ttest(2,i));
-    C12_test = C12_nom*((1+delta)-2*delta*Ttest(3,i)); 
+    J1_test = J1_nom*Ttest(1,i);
+    J2_test = J2_nom*Ttest(2,i);
+    C12_test = C12_nom*Ttest(3,i); 
     %Kd_test = Kd_nom*((1+delta)-2*delta*Ttest(4,i)); 
 
     % calculate parameters estimation relative errors in %

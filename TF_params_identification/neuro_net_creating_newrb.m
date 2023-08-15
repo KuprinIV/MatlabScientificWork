@@ -9,18 +9,18 @@ disp('Busy!');
 load('rbfnn_ts.mat');
 
 % define RBFNN learing algorithm params
-goal = 500;
-spread = 1;
+goal = 0.0005;
+spread = 10;
 max_num_neurons = 500;
 num_neurons_per_display = 5;
 
 % create RBFNN with defined params and training data subset
-rbfnn = newrb(Ptrain, Ttrain, goal, spread, max_num_neurons, num_neurons_per_display);
+rbfnn = newrb(Ptrain, Ttr, goal, spread, max_num_neurons, num_neurons_per_display);
 
 y = sim(rbfnn, Ptrain);
-for i = 1:size(Ttrain, 1)
+for i = 1:size(Ttr, 1)
     figure(i);
-    postreg(y(i,:), Ttrain(i,:));
+    postreg(y(i,:), Ttr(i,:));
 end
 
 % save created RBFNN
