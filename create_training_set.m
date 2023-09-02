@@ -110,7 +110,7 @@ Ttrain = Ttr;%(1:3,:);
 Ptest = Ptest';
 
 % save reference P T points_number Tq
-save rbfnn_ts.mat
+save Data_subsets/rbfnn_ts.mat
 
 clc;
 disp('Done!');

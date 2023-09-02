@@ -6,7 +6,7 @@ clear; clc;
 disp('Busy!');
 % load workspace data with training subsets for input and output RBFNN
 % vectors
-load('rbfnn_ts.mat');
+load ('../Data_subsets/rbfnn_ts.mat');
 
 % define RBFNN learing algorithm params
 goal = 0.0005;

@@ -28,24 +28,12 @@ disp(' ');
 Pstep = Ptest(:, vector_num);
 % redefine variable model params from test data subset
 % restore true param values from normalized form
-% [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, vector_num, delta);
-% b1 = bcoefs(1);
-% b0 = bcoefs(2);
-% 
-% a3 = acoefs(2);
-% a2 = acoefs(3);
-% a1 = acoefs(4);
-% a0 = acoefs(5);
-a3 = Ttest(1,vector_num);
-a2 = Ttest(2,vector_num);
-a1 = Ttest(3,vector_num);
-a0 = Ttest(4,vector_num);
-b1 = Ttest(5,vector_num);
-b0 = Ttest(6,vector_num);
-% a3 = a_nom(2)*((1+delta)-2*delta*Ttest(1,vector_num));
-% a2 = a_nom(3)*((1+delta)-2*delta*Ttest(2,vector_num));
-% a1 = a_nom(4)*((1+delta)-2*delta*Ttest(3,vector_num));
-% a0 = a_nom(5)*((1+delta)-2*delta*Ttest(4,vector_num));
+a3 = a_nom(2)*Ttst(1,vector_num);
+a2 = a_nom(3)*Ttst(2,vector_num);
+a1 = a_nom(4)*Ttst(3,vector_num);
+a0 = a_nom(5)*Ttst(4,vector_num);
+b1 = b_nom(1)*Ttst(5,vector_num);
+b0 = b_nom(2)*Ttst(6,vector_num);
 
 sim('two_mass_model_tf.slx');
 
@@ -67,15 +55,12 @@ disp([a3; a2; a1; a0; b1; b0;]);
 disp('Identified model param values:');
 Y=sim(rbfnn, Pstep);
 % restore true param values from normalized form
-% [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Y, 1, delta);
-% Y(1) = acoefs(2);
-% Y(2) = acoefs(3);
-% Y(3) = acoefs(4);
-% Y(4) = acoefs(5);
-% Y(1) = a_nom(2)*((1+delta)-2*delta*Y(1));
-% Y(2) = a_nom(3)*((1+delta)-2*delta*Y(2));
-% Y(3) = a_nom(4)*((1+delta)-2*delta*Y(3));
-% Y(4) = a_nom(5)*((1+delta)-2*delta*Y(4));
+Y(1) = a_nom(2)*1;%Y(1);
+Y(2) = a_nom(3)*Y(2);
+Y(3) = a_nom(4)*Y(3);
+Y(4) = a_nom(5)*Y(4);
+Y(5) = b_nom(1)*1;%Y(5);
+Y(6) = b_nom(2)*Y(6);
 disp(Y);
 
 % calculate polynomial controller coeffs and params in Simulink model

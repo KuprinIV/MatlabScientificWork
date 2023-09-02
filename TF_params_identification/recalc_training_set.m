@@ -1,7 +1,7 @@
 clear; clc;
 
 % load training and test datasets
-load('../rbfnn_ts.mat');
+load('../Data_subsets/rbfnn_ts.mat');
 
 noise_level = 0;
 

@@ -1,6 +1,6 @@
 clear; clc;
 
-load ('rbfnn_ts.mat');
+load ('../Data_subsets/rbfnn_ts.mat');
 
 % define number of training subset
 NUM = 100; 

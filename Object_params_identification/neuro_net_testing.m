@@ -3,7 +3,7 @@
 % load RBFNN data
 load('rbfnn_res.mat');
 % load data with training and test subsets
-load ('rbfnn_ts.mat');
+load ('../Data_subsets/rbfnn_ts.mat');
 
 % set output noise level
 noise_level = 0;

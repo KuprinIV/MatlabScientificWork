@@ -3,7 +3,7 @@ clear; clc;
 % load RBFNN data
 load('rbfnn_res.mat');
 % load data with training and test subsets
-load ('rbfnn_ts.mat');
+load ('../Data_subsets/rbfnn_ts.mat');
 
 % select random data vector from test subset
 vector_num = 1 + round((NUM_TEST-1)*rand(1,1));

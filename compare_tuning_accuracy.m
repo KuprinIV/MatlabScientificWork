@@ -1,7 +1,7 @@
 clear; clc;
 % load data
-load ('rbfnn_ts.mat');
-load('mse_params.mat');
+load ('Data_subsets/rbfnn_ts.mat');
+load('Object_params_identification/mse_params.mat');
 load('TF_params_identification/mse_tf.mat');
 
 % plot MSE values for both identification methods
