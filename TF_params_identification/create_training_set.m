@@ -10,11 +10,11 @@ Ttr = zeros(6, NUM_TRAIN);
 Ttst = zeros(6, NUM_TEST);
 
 % calc nominal transfer function coefficients
-[b_nom, a_nom] = calcPolyCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd);
+[b_nom, a_nom] = calcPolyCoeffs(Ksp, C, Ra, Ta, J1_nom, J2_nom, C12_nom, Kd_nom);
 
 for i=1:NUM_TRAIN
     % calc transfer function polynomial coeffs for current vectors state
-    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttrain, i);
+    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1_nom, J2_nom, C12_nom, Kd_nom, Ttrain, i);
     b1 = bcoefs(1);
     b0 = bcoefs(2);
     
@@ -33,7 +33,7 @@ end
 
 for i=1:NUM_TEST
     % calc transfer function polynomial coeffs for current vectors state
-    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1, J2, C12, Kd, Ttest, i);
+    [bcoefs, acoefs] = calcPolyABCoeffs(Ksp, C, Ra, Ta, J1_nom, J2_nom, C12_nom, Kd_nom, Ttest, i);
     b1 = bcoefs(1);
     b0 = bcoefs(2);
     

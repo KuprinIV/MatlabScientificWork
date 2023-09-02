@@ -16,7 +16,7 @@ C12 = 0.65;
 Kd = 0.01;
 
 % set output noise level
-noise_level = 0;%10;
+noise_level = 0.00014;
 
 % define MSE vectors
 mse1 = zeros(NUM_TEST, 1);
@@ -57,7 +57,7 @@ for i = 1:NUM_TEST
     C12 = C12_nom*Ttest(3,i);
     Kd = Kd_nom*Ttest(4,i);
 
-    out = sim('two_mass_model.slx');
+    sim('two_mass_model.slx');
 
     if max(simout(:,2)) > 500 || min(simout(:,2)) < 0
         disp(['model with test vector ', num2str(i), ' is unstable']);
@@ -96,8 +96,18 @@ for i = 1:NUM_TEST
     C12 = C12_nom*Ttest(3,i);
     Kd = Kd_nom*Ttest(4,i);
 
+    % set nominal PR coeffs
+    c1 = pr_params(1);
+    c0 = pr_params(2);
+    r3 = pr_params(3);
+    r2 = pr_params(4);
+    r1 = pr_params(5);
+    r0 = pr_params(6);
+    pref_gain = 10*(C*c0/Ksp + r0);
+
     % get step response for selected test vector
-    Pstep = Ptest(:, i);
+    sim('two_mass_model.slx');
+    Pstep = decimated(:, 2);
 
     % identify model params using RBFNN
     Y=sim(rbfnn, Pstep);
@@ -110,7 +120,8 @@ for i = 1:NUM_TEST
     [c1, c0, r3, r2, r1, r0] = calc_PR(Ksp, C, Ra, Ta, Y(1), Y(2), Y(3), Kd_nom);
     pref_gain = 10*(C*c0/Ksp + r0);
 
-    out = sim('two_mass_model.slx');
+    % simulate after PR tuning
+    sim('two_mass_model.slx');
 
     if max(simout(:,2)) > 500 || min(simout(:,2)) < 0
         disp(['model with test vector ', num2str(i), ' is unstable']);
@@ -140,5 +151,7 @@ plot(mse1, 'b -');
 plot(mse_params, 'r-'); 
 hold off;
 legend('MSE nominal PR','MSE RBF PR');
+
 % save mse_params data into the file
-save mse_params mse_params;
+noise_params = noisy_signal;
+save mse_params mse_params noise_params;

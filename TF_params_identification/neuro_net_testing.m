@@ -5,7 +5,7 @@ load('rbfnn_res.mat');
 % load data with training and test subsets
 load ('rbfnn_ts.mat');
 
-noise_level = 10;
+noise_level = 0;
 
 y = sim(rbfnn, Ptest);
 for i = 1:size(Ttst, 1)
@@ -50,9 +50,28 @@ for i=1:NUM_TEST
     disp('Real model param values:');
     disp(Ttst(:, i));
 
+    % define parameters for test data subset
+    a3 = a_nom(2)*Ttst(1,i);
+    a2 = a_nom(3)*Ttst(2,i);
+    a1 = a_nom(4)*Ttst(3,i); 
+    a0 = a_nom(5)*Ttst(4,i); 
+    b1 = b_nom(1)*Ttst(5,i); 
+    b0 = b_nom(2)*Ttst(6,i); 
+
+    %a3_test = a3;
+    a2_test = a2;
+    a1_test = a1;
+    a0_test = a0;
+%     b1_test = b1;
+    b0_test = b0;
+
+    % get step response for selected test vector
+    sim('two_mass_model_tf.slx');
+    Pstep = decimated(:, 2);
+
     % identify model params with RBFNN
     disp('Identified model param values:');
-    Y=sim(rbfnn, Ptest(:,i));
+    Y=sim(rbfnn, Pstep);
     disp(Y);
 
     a3 = a_nom(2)*1;%Y(1);
@@ -61,13 +80,6 @@ for i=1:NUM_TEST
     a0 = a_nom(5)*Y(4);
     b1 = b_nom(1)*1;%Y(5);
     b0 = b_nom(2)*Y(6);
-
-    %a3_test = a_nom(2)*Ttst(1,i);
-    a2_test = a_nom(3)*Ttst(2,i);
-    a1_test = a_nom(4)*Ttst(3,i);
-    a0_test = a_nom(5)*Ttst(4,i);
-%     b1_test = b_nom(1)*Ttst(5,i);
-    b0_test = b_nom(2)*Ttst(6,i);
 
     % calculate parameters estimation relative errors in %
    % a3_err(i) = (a3-a3_test)/a3_test*100;
@@ -78,13 +90,13 @@ for i=1:NUM_TEST
 %     b1_err(i) = (b1-b1_test)/b1_test*100;
     b0_err(i) = (b0-b0_test)/b0_test*100;
 
-    out = sim('two_mass_model_tf.slx');
+    sim('two_mass_model_tf.slx');
     Pid = decimated(:,2);
     % plot step response
     plot(simout(:,1), simout(:,2));
     Pt = Ptest(1:length(Pid), i);
     % calculate MSE between test and identified step responses
-    mse(i) = sqrt(immse(Pt, Pid));
+    mse(i) = sqrt(immse(Pt, Pstep));
     disp(['MSE = ', num2str(mse(i))]);
     disp('-----------------------------------');
 
@@ -121,7 +133,7 @@ legend('a2 errors', 'a1 errors', 'a0 errors', 'b0 errors')
 hold off;
 
 % plot noisy signal example
-figure(size(Ttst, 1)+4);
+figure(size(Ttest, 1)+4);
 set(gcf,'color','w');
 annotation('arrow',[.1305,.1305],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
