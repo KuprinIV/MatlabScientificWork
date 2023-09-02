@@ -41,9 +41,14 @@ disp(Y);
 pref_gain = 10*(C*c0/Ksp + r0);
 
 % perform simulation with system Simulink model
-out = sim('two_mass_model.slx');
+sim('two_mass_model.slx');
 
 figure(1)
+set(gcf,'color','w');
+annotation('arrow',[.131,.131],[.9,1]);
+annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('arrow',[.85,.95],[.111,.111]);
+annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 plot(simout(:,1), simout(:,2), 'b -');
 grid on;
 title(['Test vector is ', num2str(vector_num)]);

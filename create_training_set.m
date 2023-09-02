@@ -28,7 +28,7 @@ NUM_TEST = 0.2*NUM_TRAIN;
 %global Tq;
 Tq = 0.01;
 % decimation factor
-dec_factor = 15;
+dec_factor = 20;
 % number of step response characteristic points
 points_num = 3/(Tq*dec_factor)+1;
 
@@ -45,7 +45,7 @@ pref_gain = 10*(C*c0/Ksp + r0);
 % save step responses for vectors from deviated two-mass system param values
 figure(1); grid on; hold all;
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -77,7 +77,7 @@ Ptest = zeros(NUM_TEST, points_num);
 % save step responses for vectors from deviated two-mass system param values
 figure(2);  grid on; hold all;
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 

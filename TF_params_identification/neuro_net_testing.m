@@ -11,6 +11,8 @@ y = sim(rbfnn, Ptest);
 for i = 1:size(Ttst, 1)
     figure(i);
     postreg(y(i,:), Ttst(i,:));
+    set(gcf,'color','w');
+    grid on;
 end
 
 % define MSE vector
@@ -25,14 +27,15 @@ a0_err = zeros(NUM_TEST, 1);
 b1_err = zeros(NUM_TEST, 1);
 b0_err = zeros(NUM_TEST, 1);
 
-% Наложение шума на идентифицируемый переходный процесс k = 0.00; %0.005; %
+% РќР°Р»РѕР¶РµРЅРёРµ С€СѓРјР° РЅР° РёРґРµРЅС‚РёС„РёС†РёСЂСѓРµРјС‹Р№ РїРµСЂРµС…РѕРґРЅС‹Р№ РїСЂРѕС†РµСЃСЃ k = 0.00; %0.005; %
 % noise min_noise = -P(size(P,1))*k; max_noise =  P(size(P,1))*k; noise =
 % min_noise + (max_noise - min_noise)*rand(size(P,1),1); P_n = P+noise;
 
 % perform testing RBFNN identification on test data subset
 figure(size(Ttst, 1)+1);
+set(gcf,'color','w');
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,���/�','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -92,25 +95,37 @@ end
 
 % plot MSE
 figure(size(Ttst, 1)+2);
+set(gcf,'color','w');
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','MSE,���/�','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','MSE,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
-plot(mse, 'b -'); grid on;
+plot(mse, 'k -'); grid on;
 
 % plot relative parameters estimation errors
-figure(size(Ttst, 1)+3); 
-annotation('arrow',[.131,.131],[.9,1]);
+figure(size(Ttst, 1)+3);
+set(gcf,'color','w');
+annotation('arrow',[.1305,.1305],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','Errors, %','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
-annotation('arrow',[.85,.95],[.111,.111]);
+annotation('arrow',[.85,.95],[.1105,.1105]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 hold all;
 grid on;
 %plot(a3_err);
-plot(a2_err);
-plot(a1_err);
-plot(a0_err);
+plot(a2_err, 'k-');
+plot(a1_err, 'k-*');
+plot(a0_err, 'k-o');
 % plot(b1_err);
-plot(b0_err);
+plot(b0_err, 'k:');
 legend('a2 errors', 'a1 errors', 'a0 errors', 'b0 errors')
 hold off;
+
+% plot noisy signal example
+figure(size(Ttst, 1)+4);
+set(gcf,'color','w');
+annotation('arrow',[.1305,.1305],[.9,1]);
+annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('arrow',[.85,.95],[.1105,.1105]);
+annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+plot(simout(:,1), noisy_signal, 'k');
+grid on;

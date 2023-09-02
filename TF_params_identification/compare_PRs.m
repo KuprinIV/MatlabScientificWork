@@ -16,11 +16,11 @@ C12 = 0.65;
 Kd = 0.01;
 
 % set output noise level
-noise_level = 10;
+noise_level = 0;
 
 % define MSE vectors
 mse1 = zeros(NUM_TEST, 1);
-mse2 = zeros(NUM_TEST, 1);
+mse_coeffs = zeros(NUM_TEST, 1);
 
 % calculate PR for initial model params and test it perfomance on test
 % subset
@@ -42,9 +42,10 @@ a0 = a_nom(5);
 out = sim('two_mass_model_tf.slx');
 
 figure(1);  grid on; hold all;
+set(gcf,'color','w');
 plot(simout(:,1), simout(:,2));
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -92,8 +93,9 @@ disp('Busy');
 disp(' ');
 
 figure(2);  grid on; hold all;
+set(gcf,'color','w');
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -124,7 +126,7 @@ for i = 1:NUM_TEST
     else
         figure(2); plot(simout(:,1), simout(:,2));
         % calculate MSE between step responses on 5 seconds interval (before Mc)
-        mse2(i) = sqrt(immse(Pref, simout(:,2)));
+        mse_coeffs(i) = sqrt(immse(Pref, simout(:,2)));
     end
 end
 
@@ -137,11 +139,14 @@ disp('------------------------');
 
 % plot MSE graphics
 figure(3); hold on; grid on;
+set(gcf,'color','w');
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','MSE,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','MSE,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 plot(mse1, 'b -');
-plot(mse2, 'r-'); 
+plot(mse_coeffs, 'r-'); 
 hold off;
 legend('MSE nominal PR','MSE RBF PR');
+% save mse_coeffs data into the file
+save mse_tf mse_coeffs;

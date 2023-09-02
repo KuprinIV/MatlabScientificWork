@@ -6,12 +6,13 @@ load('rbfnn_res.mat');
 load ('rbfnn_ts.mat');
 
 % set output noise level
-noise_level = 1000;
+noise_level = 0;%1000;
 
 y = sim(rbfnn, Ptest);
 for i = 1:size(Ttest,1)
     figure(i);
     postreg(y(i,:), Ttest(i,:));
+    set(gcf,'color','w');
 end
 
 % define MSE vector
@@ -23,14 +24,15 @@ j2_err = zeros(NUM_TEST, 1);
 c12_err = zeros(NUM_TEST, 1);
 %kd_err = zeros(NUM_TEST, 1);
 
-% Наложение шума на идентифицируемый переходный процесс k = 0.00; %0.005; %
+% РќР°Р»РѕР¶РµРЅРёРµ С€СѓРјР° РЅР° РёРґРµРЅС‚РёС„РёС†РёСЂСѓРµРјС‹Р№ РїРµСЂРµС…РѕРґРЅС‹Р№ РїСЂРѕС†РµСЃСЃ k = 0.00; %0.005; %
 % noise min_noise = -P(size(P,1))*k; max_noise =  P(size(P,1))*k; noise =
 % min_noise + (max_noise - min_noise)*rand(size(P,1),1); P_n = P+noise;
 
 % perform testing RBFNN identification on test data subset
 figure(size(Ttest,1)+1);
+set(gcf,'color','w');
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','W,���/�','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
@@ -83,23 +85,25 @@ end
 
 % plot MSE
 figure(size(Ttest,1)+2);
+set(gcf,'color','w');
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','MSE,���/�','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','MSE,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 plot(mse, 'b -'); grid on;
 
 % plot relative parameters estimation errors
 figure(size(Ttest,1)+3); 
-annotation('arrow',[.131,.131],[.9,1]);
+set(gcf,'color','w');
+annotation('arrow',[.1305,.1305],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','Errors, %','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
-annotation('arrow',[.85,.95],[.111,.111]);
+annotation('arrow',[.85,.95],[.1103,.1103]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 hold on;
 grid on;
-plot(j1_err, 'b');
-plot(j2_err, 'r');
-plot(c12_err, 'g');
+plot(j1_err, 'k--');
+plot(j2_err, 'k:');
+plot(c12_err, 'k-');
 %plot(kd_err);
 legend('J1 errors', 'J2 errors', 'C12 errors')
 hold off;

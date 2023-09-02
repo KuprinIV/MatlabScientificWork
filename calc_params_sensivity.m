@@ -107,13 +107,18 @@ for i=1:NUM
 end
 % draw errors graph
 figure(1); hold on; grid on;
-title('Step responses errors to parameters deviation');
-
-plot(deviation, [j1_errors j2_errors c12_errors kd_errors]);
+%title('Step responses errors to parameters deviation');
+set(gcf,'color','w');
+annotation('arrow',[.1305,.1305],[.9,1]);
+annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('arrow',[.85,.95],[.1105,.1105]);
+annotation('textbox',[.92 .01 .1 .1],'String','Δ','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+plot(deviation, j1_errors, 'k-', deviation, j2_errors, 'k--', deviation, c12_errors, 'k:', deviation, kd_errors, 'k-.');
 legend('J1','J2','C12','Kd');
 
 % draw sensivity graph
 figure(2); hold on; grid on;
+set(gcf,'color','w');
 title('Step responses sensivity to parameters deviation');
 
 plot(deviation(2:100), [j1_sens j2_sens c12_sens kd_sens]);

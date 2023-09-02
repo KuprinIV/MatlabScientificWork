@@ -32,17 +32,18 @@ J1 = J1_nom*Ttest(1,vector_num);
 J2 = J2_nom*Ttest(2,vector_num);
 C12 = C12_nom*Ttest(3,vector_num);
 
-out = sim('two_mass_model.slx');
+sim('two_mass_model.slx');
 
 % plot step responses on the same figure
 figure(1); grid on; hold on;
+set(gcf,'color','w');
 title(['Test vector is ', num2str(vector_num)]);
 annotation('arrow',[.131,.131],[.9,1]);
-annotation('textbox',[.01 .9 .1 .1],'String','?,‡‰/Ò','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
+annotation('textbox',[.01 .9 .1 .1],'String','Œ©,—Ä–∞–¥/—Å','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
-plot(simout(:,1), simout(:,2), 'b');
+plot(simout(:,1), simout(:,2), 'k--');
 
 % show real model params
 disp('Real model param values:');
@@ -62,4 +63,4 @@ disp(Y);
 pref_gain = 10*(C*c0/Ksp + r0);
 
 out = sim('two_mass_model.slx');
-plot(simout(:,1), simout(:,2), 'r');
+plot(simout(:,1), simout(:,2), 'k');
