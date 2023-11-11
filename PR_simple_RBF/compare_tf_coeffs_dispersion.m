@@ -8,8 +8,8 @@ addpath("Object_params_identification\");
 
 % calculate dispersion of transfer function polynomial coefficients 
 % evaluation for object parameters identification method
-params_a0_dev = zeros(NUM_TEST, 1);
-params_b0_dev = zeros(NUM_TEST, 1);
+params_a2_dev = zeros(NUM_TEST, 1);
+params_a1_dev = zeros(NUM_TEST, 1);
 
 % calc PR with nominal model parameter values
 [c0, r1, r0] = calc_PR(Ksp, C, Ra, Ta, J1_nom);
@@ -33,8 +33,8 @@ for i=1:NUM_TEST
     [bcnn, acnn] = calcPolyCoeffs(Ksp, C, Ra, Ta, J1);
 
     % calculate deviation of coefficient values
-    params_a0_dev(i) = acnn(3) - ac(3);
-    params_b0_dev(i) = bcnn(1) - bc(1);
+    params_a2_dev(i) = acnn(1) - ac(1);
+    params_a1_dev(i) = acnn(2) - ac(2);
 end
 
 % calculate dispersion of transfer function polynomial coefficients 
@@ -44,14 +44,15 @@ end
 load('TF_params_identification/rbfnn_res.mat');
 load('TF_params_identification/rbfnn_ts.mat');
 
-tf_a0_dev = zeros(NUM_TEST, 1);
-tf_b0_dev = zeros(NUM_TEST, 1);
+tf_a2_dev = zeros(NUM_TEST, 1);
+tf_a1_dev = zeros(NUM_TEST, 1);
 
 for i=1:NUM_TEST
     % define parameters for test data subset
-    a0 = a_nom(3)*Ttst(1,i); 
-    a1 = a_nom(2); 
-    b0 = b_nom(1)*Ttst(2,i); 
+    a2 = a_nom(1)*Ttst(1,i); 
+    a1 = a_nom(2)*Ttst(2,i); 
+    a0 = a_nom(3);
+    b0 = b_nom(1); 
 
     % get step response for selected test vector
     sim('two_mass_model_tf.slx');
@@ -60,22 +61,22 @@ for i=1:NUM_TEST
     % identify model params with RBFNN
     Y=sim(rbfnn, Pstep);
 
-    a0nn = a_nom(3)*Y(1);
-    b0nn = b_nom(1)*Y(2);
+    a2nn = a_nom(1)*Y(1);
+    a1nn = a_nom(2)*Y(2);
 
     % calculate deviation of coefficient values
-    tf_a0_dev(i) = a0nn - a0;
-    tf_b0_dev(i) = b0nn - b0;
+    tf_a2_dev(i) = a2nn - a2;
+    tf_a1_dev(i) = a1nn - a1;
 end
 
 % calculate dispersion of coefficients evaluation values for object
 % parameters identification method
 disp('Object parameters identification method:');
-disp(['a0: variation = ', num2str(var(params_a0_dev)), ', standard deviation = ', num2str(std(params_a0_dev))]);
-disp(['b0: variation = ', num2str(var(params_b0_dev)), ', standard deviation = ', num2str(std(params_b0_dev))]);
+disp(['a2: variation = ', num2str(var(params_a2_dev)), ', standard deviation = ', num2str(std(params_a2_dev))]);
+disp(['a1: variation = ', num2str(var(params_a1_dev)), ', standard deviation = ', num2str(std(params_a1_dev))]);
 disp('  ');
 % calculate dispersion of coefficients evaluation values for transfer 
 % function polynomial coefficients identification method
 disp('Transfer function polynomial coefficients identification method:');
-disp(['a0: variation = ', num2str(var(tf_a0_dev)), ', standard deviation = ', num2str(std(tf_a0_dev))]);
-disp(['b0: variation = ', num2str(var(tf_b0_dev)), ', standard deviation = ', num2str(std(tf_b0_dev))]);
+disp(['a2: variation = ', num2str(var(tf_a2_dev)), ', standard deviation = ', num2str(std(tf_a2_dev))]);
+disp(['a1: variation = ', num2str(var(tf_a1_dev)), ', standard deviation = ', num2str(std(tf_a1_dev))]);

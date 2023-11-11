@@ -9,7 +9,7 @@ disp('Busy!');
 load('rbfnn_ts.mat');
 
 % define RBFNN learing algorithm params
-goal = 0.00001;
+goal = 0.0001;
 spread = 1;
 max_num_neurons = 500;
 num_neurons_per_display = 1;
