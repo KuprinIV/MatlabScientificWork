@@ -133,7 +133,7 @@ legend('a2 errors', 'a1 errors', 'a0 errors', 'b0 errors')
 hold off;
 
 % plot noisy signal example
-figure(size(Ttest, 1)+4);
+figure(size(Ttst, 1)+4);
 set(gcf,'color','w');
 annotation('arrow',[.1305,.1305],[.9,1]);
 annotation('textbox',[.01 .9 .1 .1],'String','Ω,рад/с','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
