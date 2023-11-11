@@ -7,7 +7,7 @@ load ('rbfnn_ts.mat');
 
 noise_level = 0;
 
-param_lbls = ["a0","b0"];
+param_lbls = ["a2","a1"];
 
 y = sim(rbfnn, Ptest);
 for i = 1:size(Ttst, 1)
@@ -31,8 +31,8 @@ end
 mse = zeros(NUM_TEST, 1);
 
 % define vectors with parameters estimation relative errors
-a0_err = zeros(NUM_TEST, 1);
-b0_err = zeros(NUM_TEST, 1);
+a2_err = zeros(NUM_TEST, 1);
+a1_err = zeros(NUM_TEST, 1);
 
 % РќР°Р»РѕР¶РµРЅРёРµ С€СѓРјР° РЅР° РёРґРµРЅС‚РёС„РёС†РёСЂСѓРµРјС‹Р№ РїРµСЂРµС…РѕРґРЅС‹Р№ РїСЂРѕС†РµСЃСЃ k = 0.00; %0.005; %
 % noise min_noise = -P(size(P,1))*k; max_noise =  P(size(P,1))*k; noise =
@@ -47,7 +47,7 @@ annotation('arrow',[.85,.95],[.111,.111]);
 annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 
 % calc PR with nominal model parameter values
-[c0, r1, r0] = calc_PR(b_nom(1), a_nom(2), a_nom(3));
+[c0, r1, r0] = calc_PR(b_nom(1), a_nom(1), a_nom(2), a_nom(3));
 % correct control system's gain
 pref_gain = 10*(a_nom(3)*c0/b_nom(1) + r0);
 
@@ -58,12 +58,13 @@ for i=1:NUM_TEST
     disp(Ttst(:, i));
 
     % define parameters for test data subset 
-    a0 = a_nom(3)*Ttst(1,i); 
-    a1 = a_nom(2);
-    b0 = b_nom(1)*Ttst(2,i); 
+    a2 = a_nom(1)*Ttst(1,i); 
+    a1 = a_nom(2)*Ttst(2,i);
+    a0 = a_nom(3);
+    b0 = b_nom(1);
 
-    a0_test = a0;
-    b0_test = b0;
+    a2_test = a2;
+    a1_test = a1;
 
     % get step response for selected test vector
     sim('two_mass_model_tf.slx');
@@ -74,13 +75,14 @@ for i=1:NUM_TEST
     Y=sim(rbfnn, Pstep);
     disp(Y);
 
-    a0 = a_nom(3)*Y(1);
-    a1 = a_nom(2);
-    b0 = b_nom(1)*Y(2);
+    a2 = a_nom(1)*Y(1);
+    a1 = a_nom(2)*Y(2);
+    a0 = a_nom(3);
+    b0 = b_nom(1);
 
     % calculate parameters estimation relative errors in %
-    a0_err(i) = (a0-a0_test)/a0_test*100;
-    b0_err(i) = (b0-b0_test)/b0_test*100;
+    a2_err(i) = (a2-a2_test)/a2_test*100;
+    a1_err(i) = (a1-a1_test)/a1_test*100;
 
     sim('two_mass_model_tf.slx');
     Pid = decimated(:,2);
@@ -115,9 +117,9 @@ annotation('arrow',[.85,.95],[.1105,.1105]);
 annotation('textbox',[.92 .01 .1 .1],'String','num','FontWeight','Bold','FitBoxToText','on','LineStyle','none');
 hold all;
 grid on;
-plot(a0_err, 'k');
-plot(b0_err, 'k--');
-legend('a0 errors', 'b0 errors')
+plot(a2_err, 'k');
+plot(a1_err, 'k--');
+legend('a2 errors', 'a1 errors')
 hold off;
 
 % plot noisy signal example
