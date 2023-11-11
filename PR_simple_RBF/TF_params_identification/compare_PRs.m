@@ -16,11 +16,12 @@ mse_coeffs = zeros(NUM_TEST, 1);
 % subset
 
 % calculate polynomial controller coeffs and params in Simulink model
-[c0, r1, r0] = calc_PR(b_nom(1),  a_nom(2), a_nom(3));
+[c0, r1, r0] = calc_PR(b_nom(1), a_nom(1),  a_nom(2), a_nom(3));
 pr_params = [c0, r1, r0];
 pref_gain = 10*(a_nom(3)*c0/b_nom(1) + r0);
 
 b0 = b_nom(1);
+a2 = a_nom(1);
 a1 = a_nom(2);
 a0 = a_nom(3);
 
@@ -46,8 +47,10 @@ disp('Busy');
 disp(' ');
 for i = 1:NUM_TEST
     % restore true param values from normalized form
-    a0 = a_nom(3)*Ttst(1,i);
-    b0 = b_nom(1)*Ttst(2,i); 
+    a2 = a_nom(1)*Ttst(1,i); 
+    a1 = a_nom(2)*Ttst(2,i);
+    a0 = a_nom(3);
+    b0 = b_nom(1);
 
     out = sim('two_mass_model_tf.slx');
 
@@ -83,8 +86,10 @@ annotation('textbox',[.92 .01 .1 .1],'String','t,c','FontWeight','Bold','FitBoxT
 
 for i = 1:NUM_TEST
     % restore true param values from normalized form
-    a0 = a_nom(3)*Ttst(1,i);
-    b0 = b_nom(1)*Ttst(2,i); 
+    a2 = a_nom(1)*Ttst(1,i); 
+    a1 = a_nom(2)*Ttst(2,i);
+    a0 = a_nom(3);
+    b0 = b_nom(1);
 
     % set nominal PR coeffs
     c0 = pr_params(1);
@@ -100,7 +105,7 @@ for i = 1:NUM_TEST
     Y=sim(rbfnn, Pstep);   
 
     % calculate polynomial controller coeffs and params in Simulink model
-    [c0, r1, r0] = calc_PR(b_nom(1)*Y(2), a_nom(2), a_nom(3)*Y(1));
+    [c0, r1, r0] = calc_PR(b_nom(1), a_nom(1)*Y(1), a_nom(2)*Y(2), a_nom(3));
     pref_gain = 10*(C*c0/Ksp + r0);
 
     % simulate after PR tuning

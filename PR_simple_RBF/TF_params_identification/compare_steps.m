@@ -6,7 +6,7 @@ load('rbfnn_res.mat');
 load ('rbfnn_ts.mat');
 
 % calculate polynomial controller coeffs and params in Simulink model
-[c0, r1, r0] = calc_PR(b_nom(1), a_nom(2), a_nom(3));
+[c0, r1, r0] = calc_PR(b_nom(1), a_nom(1), a_nom(2), a_nom(3));
 pref_gain = 10*(a_nom(3)*c0/b_nom(1) + r0);
 
 % select random data vector from test subset
@@ -18,8 +18,10 @@ disp(' ');
 Pstep = Ptest(:, vector_num);
 % redefine variable model params from test data subset
 % restore true param values from normalized form
-a0 = a_nom(3)*Ttst(1,vector_num);
-b0 = b_nom(1)*Ttst(2,vector_num);
+a0 = a_nom(3);
+a1 = a_nom(2)*Ttst(2,vector_num);
+a2 = a_nom(1)*Ttst(1,vector_num);
+b0 = b_nom(1);
 
 sim('two_mass_model_tf.slx');
 
@@ -35,19 +37,19 @@ plot(simout(:,1), simout(:,2), 'b');
 
 % show real model params
 disp('Real model param values:');
-disp([a0; b0;]);
+disp([a2; a1;]);
 
 % identify model params with RBFNN
 disp('Identified model param values:');
 Y=sim(rbfnn, Pstep);
 % restore true param values from normalized form
-Y(1) = a_nom(3)*Y(1);
-Y(2) = b_nom(1)*Y(2);
+Y(1) = a_nom(1)*Y(1);
+Y(2) = a_nom(2)*Y(2);
 disp(Y);
 
 % calculate polynomial controller coeffs and params in Simulink model
-[c0, r1, r0] = calc_PR(Y(2), a_nom(2), Y(1));
-pref_gain = 10*(Y(1)*c0/Y(2) + r0);
+[c0, r1, r0] = calc_PR(b_nom(1), Y(1), Y(2), a_nom(3));
+pref_gain = 10*(a_nom(3)*c0/b_nom(1) + r0);
 
 sim('two_mass_model_tf.slx');
 plot(simout(:,1), simout(:,2), 'r');
