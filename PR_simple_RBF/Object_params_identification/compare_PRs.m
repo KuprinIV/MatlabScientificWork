@@ -6,7 +6,7 @@ load('rbfnn_res.mat');
 load ('../Data_subsets/rbfnn_ts.mat');
 
 % set output noise level
-noise_level = 0;%0.0055;
+noise_level = 0;%0.006;
 
 % define MSE vectors
 mse1 = zeros(NUM_TEST, 1);
@@ -132,5 +132,6 @@ hold off;
 legend('MSE nominal PR','MSE RBF PR');
 
 % save mse_params data into the file
+disp(['Noise RMS = ', num2str(rms(noisy_signal))]);
 noise_params = noisy_signal;
 save mse_params mse_params noise_params;
