@@ -9,7 +9,7 @@ disp('Busy!');
 load ('../Data_subsets/rbfnn_ts.mat');
 
 % define RBFNN learing algorithm params
-spread = 0.1;
+spread = 0.01;
 
 % create RBFNN with defined params and training data subset
 rbfnn = newgrnn(Ptrain, Ttrain, spread);
